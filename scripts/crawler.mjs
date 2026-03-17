@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import RSSParser from 'rss-parser';
-import pkg from 'google-translate-api-next';
-const { translate } = pkg;
+import googleTranslate from 'google-translate-api-next';
 
-// 브라우저처럼 보이게 하여 차단을 방지하는 설정 추가
+// 에러 방지를 위해 라이브러리 구조에 맞게 translate 함수 추출
+const translate = googleTranslate.translate || googleTranslate;
+
 const parser = new RSSParser({
   headers: {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'application/rss+xml, application/xml, text/xml, */*',
   },
   timeout: 10000,
 });
