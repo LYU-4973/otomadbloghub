@@ -2,32 +2,35 @@ import fs from 'node:fs';
 import RSSParser from 'rss-parser';
 import googleTranslate from 'google-translate-api-next';
 
-// 에러 방지를 위해 라이브러리 구조에 맞게 translate 함수 추출
 const translate = googleTranslate.translate || googleTranslate;
 
 const parser = new RSSParser({
   headers: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    // 티스토리 406 에러 방지를 위한 표준 브라우저 헤더
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
   },
-  timeout: 10000,
+  timeout: 15000,
 });
 
 const BLOG_SOURCES = [
   { name: "루klng LNG", mainUrl: "https://blog.naver.com/looklng", platform: "Naver" },
   { name: "こち横", mainUrl: "https://note.com/kochi928", platform: "Note" },
-  { name: "모르는 사람", mainUrl: "https://moru-is-person.tistory.com/", platform: "Tistory" },
-  { name: "Peltvr", mainUrl: "https://peltvr.blogspot.com/", platform: "Blogspot" },
+  { name: "모르는 사람", mainUrl: "https://moru-is-person.tistory.com", platform: "Tistory" },
+  { name: "Peltvr", mainUrl: "https://peltvr.blogspot.com", platform: "Blogspot" },
 ];
 
 function getRssUrl(source) {
   const url = source.mainUrl.replace(/\/$/, ""); 
   if (source.platform === "Naver") {
-    // 네이버 블로그 ID 추출 로직 강화
     const id = url.split('/').filter(Boolean).pop();
     return `https://rss.blog.naver.com/${id}.xml`;
   }
+  if (source.platform === "Tistory") return `${url}/rss`; // 티스토리는 /rss가 표준입니다.
   if (source.platform === "Note") return `${url}/rss`;
-  if (source.platform === "Tistory") return `${url}/rss`;
   if (source.platform === "Blogspot") return `${url}/feeds/posts/default?alt=rss`;
   return url;
 }
@@ -46,19 +49,25 @@ async function updateData() {
       if (item) {
         console.log(`🌐 [${source.name}] 번역 중: ${item.title}`);
         
-        const [ko, en, ja] = await Promise.all([
-          translate(item.title, { to: 'ko' }).catch(() => ({ text: item.title })),
-          translate(item.title, { to: 'en' }).catch(() => ({ text: item.title })),
-          translate(item.title, { to: 'ja' }).catch(() => ({ text: item.title }))
-        ]);
+        let koText = item.title, enText = item.title, jaText = item.title;
+        try {
+          const [ko, en, ja] = await Promise.all([
+            translate(item.title, { to: 'ko' }),
+            translate(item.title, { to: 'en' }),
+            translate(item.title, { to: 'ja' })
+          ]);
+          koText = ko.text; enText = en.text; jaText = ja.text;
+        } catch (tErr) {
+          console.warn(`⚠️ [${source.name}] 번역 실패:`, tErr.message);
+        }
 
         allPosts.push({
-          titles: { ko: ko.text, en: en.text, ja: ja.text },
+          titles: { ko: koText, en: enText, ja: jaText },
           original_title: item.title,
           url: item.link,
           author: source.name,
           platform: source.platform,
-          date: item.pubDate || new Date().toISOString(),
+          date: item.pubDate || item.isoDate || new Date().toISOString(),
           category: "Blog"
         });
       }
@@ -67,12 +76,9 @@ async function updateData() {
     }
   }
 
-  // 날짜 기준 최신순 정렬
-  allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  // 결과 저장
+  allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   fs.writeFileSync('./src/data.json', JSON.stringify(allPosts, null, 2));
-  console.log(`✅ 수집 완료: 총 ${allPosts.length}개의 게시글`);
+  console.log(`\n✅ 최종 수집 완료: 총 ${allPosts.length}개의 게시글`);
 }
 
 updateData();
