@@ -3,9 +3,15 @@ import RSSParser from 'rss-parser';
 import pkg from 'google-translate-api-next';
 const { translate } = pkg;
 
-const parser = new RSSParser();
+// 브라우저처럼 보이게 하여 차단을 방지하는 설정 추가
+const parser = new RSSParser({
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+  },
+  timeout: 10000,
+});
 
-// 여기에 블로그 메인 주소를 넣으면 자동으로 RSS 주소로 변환해줄 거야
 const BLOG_SOURCES = [
   { name: "루klng LNG", mainUrl: "https://blog.naver.com/looklng", platform: "Naver" },
   { name: "こち横", mainUrl: "https://note.com/kochi928", platform: "Note" },
@@ -13,10 +19,13 @@ const BLOG_SOURCES = [
   { name: "Peltvr", mainUrl: "https://peltvr.blogspot.com/", platform: "Blogspot" },
 ];
 
-// 각 플랫폼별 RSS 주소 변환기
 function getRssUrl(source) {
-  const url = source.mainUrl.replace(/\/$/, ""); // 끝에 슬래시 제거
-  if (source.platform === "Naver") return `https://rss.blog.naver.com/${url.split('/').pop()}.xml`;
+  const url = source.mainUrl.replace(/\/$/, ""); 
+  if (source.platform === "Naver") {
+    // 네이버 블로그 ID 추출 로직 강화
+    const id = url.split('/').filter(Boolean).pop();
+    return `https://rss.blog.naver.com/${id}.xml`;
+  }
   if (source.platform === "Note") return `${url}/rss`;
   if (source.platform === "Tistory") return `${url}/rss`;
   if (source.platform === "Blogspot") return `${url}/feeds/posts/default?alt=rss`;
@@ -29,17 +38,18 @@ async function updateData() {
   for (const source of BLOG_SOURCES) {
     try {
       const rssUrl = getRssUrl(source);
+      console.log(`📡 [${source.name}] 수집 시도: ${rssUrl}`);
+      
       const feed = await parser.parseURL(rssUrl);
-      const item = feed.items[0]; // 최신글 1개
+      const item = feed.items[0]; 
 
       if (item) {
-        console.log(`🌐 [${source.name}] 번역 중...`);
+        console.log(`🌐 [${source.name}] 번역 중: ${item.title}`);
         
-        // 미리 한국어, 영어, 일본어로 번역해두기
         const [ko, en, ja] = await Promise.all([
-          translate(item.title, { to: 'ko' }),
-          translate(item.title, { to: 'en' }),
-          translate(item.title, { to: 'ja' })
+          translate(item.title, { to: 'ko' }).catch(() => ({ text: item.title })),
+          translate(item.title, { to: 'en' }).catch(() => ({ text: item.title })),
+          translate(item.title, { to: 'ja' }).catch(() => ({ text: item.title }))
         ]);
 
         allPosts.push({
@@ -48,7 +58,7 @@ async function updateData() {
           url: item.link,
           author: source.name,
           platform: source.platform,
-          date: item.pubDate,
+          date: item.pubDate || new Date().toISOString(),
           category: "Blog"
         });
       }
@@ -57,11 +67,12 @@ async function updateData() {
     }
   }
 
-  // 최신순 정렬
+  // 날짜 기준 최신순 정렬
   allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+  // 결과 저장
   fs.writeFileSync('./src/data.json', JSON.stringify(allPosts, null, 2));
-  console.log('✅ 모든 데이터 수집 및 번역 완료!');
+  console.log(`✅ 수집 완료: 총 ${allPosts.length}개의 게시글`);
 }
 
 updateData();
