@@ -1,0 +1,31 @@
+---
+---
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>관리자 터미널</title>
+    <style>
+      body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 3rem; }
+      .box { border: 1px solid #444; padding: 20px; border-radius: 8px; background: #222; }
+      h1 { color: #ff3e00; }
+      code { background: #000; padding: 2px 5px; color: #00ff41; }
+      .btn { display: inline-block; background: #444; color: #fff; padding: 10px 20px; text-decoration: none; margin-top: 10px; border-radius: 5px; }
+      .btn:hover { background: #666; }
+    </style>
+  </head>
+  <body>
+    <h1>🛠️ Admin Control Panel</h1>
+    <div class="box">
+      <h2>1. 추천 내역 확인</h2>
+      <p>구글 스프레드시트에서 사용자들이 제보한 블로그 주소를 확인하세요.</p>
+      <a href="#" class="btn">스프레드시트 열기</a>
+
+      <h2>2. 데이터 수동 업데이트</h2>
+      <p>새로운 글을 등록하려면 <code>src/data.json</code> 파일에 형식을 맞춰 추가하세요.</p>
+      <p>업데이트 후 터미널에 <code>npm run dev</code>로 확인하고 GitHub에 올리세요.</p>
+      
+      <a href="/" style="color: #888; display: block; margin-top: 20px;">← 메인 페이지로 돌아가기</a>
+      <a href="https://docs.google.com/spreadsheets/d/13UHZjmAOLvtHovyFEtgNTgQvGoqsCc5c4o0j_8zZyqQ/edit?resourcekey=&gid=457159302#gid=457159302" class="btn" target="_blank">스프레드시트 열기</a>
+    </div>
+  </body>
+</html>

@@ -1,11 +1,105 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import posts from '../data.json';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>📟 OTOMAD HUB</title>
+    <style>
+      /* 전체 배경과 폰트 설정 */
+      body { 
+        background-color: #0c0c0c; 
+        color: #00ff41; 
+        font-family: 'Courier New', Courier, monospace; 
+        padding: 2rem; 
+        line-height: 1.6;
+      }
+
+      /* 헤더 영역 */
+      header {
+        border-bottom: 2px solid #00ff41;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      h1 { margin: 0; font-size: 2rem; text-shadow: 0 0 5px #00ff41; }
+
+      /* 네비게이션 링크 */
+      nav a {
+        margin-left: 15px;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .admin-link { color: #444; }
+      .admin-link:hover { color: #888; }
+      .suggest-link { color: #ffff00; font-weight: bold; }
+      .suggest-link:hover { background: #ffff00; color: #000; }
+
+      /* 리스트 스타일 */
+      ul { list-style: none; padding: 0; }
+      li { 
+        border: 1px solid #333; 
+        margin-bottom: 1rem; 
+        padding: 1rem; 
+        transition: all 0.2s;
+      }
+      li:hover { 
+        border-color: #00ff41; 
+        background: #1a1a1a; 
+        transform: translateX(10px);
+      }
+
+      .category {
+        background: #00ff41;
+        color: #000;
+        padding: 2px 6px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      .post-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      .info {
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>📟 OTOMAD HUB</h1>
+      <nav>
+        <a href="/admin" class="admin-link">[관리자 모드]</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUuSy4tBnys3QcGEj42VVRH06_UPTICWuH3rIXUkTgagnT9g/viewform?usp=dialog" target="_blank" class="suggest-link">[+ 블로그 추천하기]</a>
+      </nav>
+    </header>
+
+    <main>
+      <p>현재 연결된 터미널 수: {posts.length}</p>
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <span class="category">{post.category}</span>
+            <a href={post.url} target="_blank" class="post-link">{post.title}</a>
+            <div class="info">
+              <span>Author: {post.author}</span> | <span>Platform: {post.platform}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>
