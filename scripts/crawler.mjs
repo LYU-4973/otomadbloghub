@@ -7,10 +7,10 @@ const parser = new RSSParser();
 
 // 여기에 블로그 메인 주소를 넣으면 자동으로 RSS 주소로 변환해줄 거야
 const BLOG_SOURCES = [
-  { name: "음MAD 제작자A", mainUrl: "https://blog.naver.com/아이디", platform: "Naver" },
-  { name: "제작자B", mainUrl: "https://note.com/아이디", platform: "Note" },
-  { name: "제작자C", mainUrl: "https://아이디.tistory.com", platform: "Tistory" },
-  { name: "제작자D", mainUrl: "https://아이디.blogspot.com", platform: "Blogspot" },
+  { name: "루klng LNG", mainUrl: "https://blog.naver.com/looklng", platform: "Naver" },
+  { name: "こち横", mainUrl: "https://note.com/kochi928", platform: "Note" },
+  { name: "모르는 사람", mainUrl: "https://moru-is-person.tistory.com/", platform: "Tistory" },
+  { name: "Peltvr", mainUrl: "https://peltvr.blogspot.com/", platform: "Blogspot" },
 ];
 
 // 각 플랫폼별 RSS 주소 변환기
