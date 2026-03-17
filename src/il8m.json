@@ -1,0 +1,35 @@
+{
+  "ko": {
+    "title": "📟 음MAD 허브",
+    "home": "[홈]",
+    "admin": "[관리자]",
+    "suggest": "[+ 제보하기]",
+    "latest": "최신 게시글",
+    "uploader": "업로더",
+    "platform": "플랫폼",
+    "original": "원제",
+    "status": ">> 연결된 터미널: "
+  },
+  "en": {
+    "title": "📟 OtoMAD HUB",
+    "home": "[HOME]",
+    "admin": "[ADMIN]",
+    "suggest": "[+ SUGGEST]",
+    "latest": "LATEST POSTS",
+    "uploader": "Uploader",
+    "platform": "Platform",
+    "original": "Original",
+    "status": ">> Terminals Connected: "
+  },
+  "ja": {
+    "title": "📟 音MADハブ",
+    "home": "[ホーム]",
+    "admin": "[管理]",
+    "suggest": "[+ 提案]",
+    "latest": "最新の投稿",
+    "uploader": "投稿者",
+    "platform": "プラットフォーム",
+    "original": "原題",
+    "status": ">> 接続済み端末: "
+  }
+}

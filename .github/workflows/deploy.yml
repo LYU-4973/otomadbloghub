@@ -1,7 +1,9 @@
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ master ] # 브랜치 이름이 master인지 꼭 확인!
+    branches: [ master ]
+  schedule:
+    - cron: '0 * * * *' # 매시간 0분마다 자동으로 실행 (크롤링)
 permissions:
   contents: read
   pages: write
@@ -31,6 +33,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Run Crawler # 👇 추가된 부분
+        run: node ./scripts/crawler.mjs
+      - name: Build Astro
+        run: npm run build
