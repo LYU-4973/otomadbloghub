@@ -7,18 +7,6 @@ import posts from '../data.json';
     <meta charset="utf-8" />
     <title>📟 OTOMAD HUB</title>
     <style>
-      .nav-link {
-    margin-left: 15px;
-    text-decoration: none;
-    color: #00ff41;
-    border: 1px solid transparent;
-    padding: 2px 5px;
-  }
-  .nav-link:hover {
-    border: 1px solid #00ff41;
-    background: #00ff41;
-    color: #000;
-  }
       /* 전체 배경과 폰트 설정 */
       body { 
         background-color: #0c0c0c; 
@@ -26,99 +14,126 @@ import posts from '../data.json';
         font-family: 'Courier New', Courier, monospace; 
         padding: 2rem; 
         line-height: 1.6;
+        margin: 0;
       }
 
-      /* 헤더 영역 */
+      /* 헤더 영역: 로고와 메뉴를 양 끝으로 정렬 */
       header {
         border-bottom: 2px solid #00ff41;
         margin-bottom: 2rem;
         padding-bottom: 1rem;
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: center;
       }
 
-      h1 { margin: 0; font-size: 2rem; text-shadow: 0 0 5px #00ff41; }
+      h1 { 
+        margin: 0; 
+        font-size: 1.8rem; 
+        text-shadow: 0 0 10px #00ff41; 
+      }
 
-      /* 네비게이션 링크 */
-      nav a {
-        margin-left: 15px;
+      /* 네비게이션 링크 공통 스타일 */
+      nav {
+        display: flex;
+        gap: 15px;
+      }
+
+      .nav-item {
         text-decoration: none;
         font-size: 0.9rem;
+        padding: 4px 8px;
+        transition: all 0.2s;
+        border: 1px solid transparent;
       }
 
-      .admin-link { color: #444; }
-      .admin-link:hover { color: #888; }
-      .suggest-link { color: #ffff00; font-weight: bold; }
-      .suggest-link:hover { background: #ffff00; color: #000; }
+      .nav-item:hover {
+        background: #00ff41;
+        color: #000;
+        border: 1px solid #00ff41;
+      }
+
+      /* 각 링크 색상 별도 지정 */
+      .home, .admin { color: #00ff41; }
+      .suggest { color: #ffff00; font-weight: bold; }
+
+      /* 상태바 */
+      .status {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+      }
 
       /* 리스트 스타일 */
       ul { list-style: none; padding: 0; }
       li { 
         border: 1px solid #333; 
         margin-bottom: 1rem; 
-        padding: 1rem; 
-        transition: all 0.2s;
+        padding: 1.2rem; 
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
       }
+
+      /* 리스트 호버 효과: 터미널 느낌 강조 */
       li:hover { 
         border-color: #00ff41; 
-        background: #1a1a1a; 
+        background: rgba(0, 255, 65, 0.05); 
         transform: translateX(10px);
+        box-shadow: -5px 0 0 #00ff41;
       }
 
       .category {
         background: #00ff41;
         color: #000;
-        padding: 2px 6px;
+        padding: 2px 8px;
         font-size: 0.75rem;
         font-weight: bold;
-        margin-right: 10px;
-        vertical-align: middle;
+        margin-right: 12px;
+        display: inline-block;
+        margin-bottom: 8px;
       }
 
       .post-link {
         color: #fff;
         text-decoration: none;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: bold;
       }
 
+      .post-link:hover {
+        color: #00ff41;
+        text-decoration: underline;
+      }
+
       .info {
-        margin-top: 8px;
+        margin-top: 12px;
         font-size: 0.85rem;
         color: #888;
       }
+
+      .info span { color: #bbb; }
     </style>
-    
   </head>
   <body>
     <header>
-      <body>
-  <header>
-    <h1>📟 OTOMAD HUB</h1>
-    <nav>
-      <a href="/otomadbloghub/" class="nav-link">[HOME]</a> 
-      <a href="/otomadbloghub/admin" class="nav-link admin-link">[ADMIN]</a>
-      <a href="네_구글_폼_주소" target="_blank" class="nav-link suggest-link">[+ SUGGEST]</a>
-    </nav>
-  </header>
-...
       <h1>📟 OTOMAD HUB</h1>
       <nav>
-        <a href="/otomadbloghub/admin" class="admin-link">[관리자 모드]</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUuSy4tBnys3QcGEj42VVRH06_UPTICWuH3rIXUkTgagnT9g/viewform?usp=dialog" target="_blank" class="suggest-link">[+ 블로그 추천하기]</a>
+        <a href="/otomadbloghub/" class="nav-item home">[HOME]</a> 
+        <a href="/otomadbloghub/admin" class="nav-item admin">[ADMIN]</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUuSy4tBnys3QcGEj42VVRH06_UPTICWuH3rIXUkTgagnT9g/viewform?usp=dialog" target="_blank" class="nav-item suggest">[+ SUGGEST]</a>
       </nav>
     </header>
 
     <main>
-      <p>현재 연결된 터미널 수: {posts.length}</p>
+      <p class="status">>> CONNECTION ESTABLISHED. TOTAL TERMINALS: {posts.length}</p>
       <ul>
         {posts.map((post) => (
           <li>
-            <span class="category">{post.category}</span>
+            <div class="category">{post.category}</div>
             <a href={post.url} target="_blank" class="post-link">{post.title}</a>
             <div class="info">
-              <span>Author: {post.author}</span> | <span>Platform: {post.platform}</span>
+              Author: <span>{post.author}</span> | Platform: <span>{post.platform}</span>
             </div>
           </li>
         ))}
