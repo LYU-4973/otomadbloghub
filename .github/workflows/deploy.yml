@@ -1,7 +1,7 @@
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ main ] # 만약 GitHub 기본 브라우저 이름이 master라면 master로 수정
+    branches: [ master ] # 만약 GitHub 기본 브라우저 이름이 master라면 master로 수정
 permissions:
   contents: read
   pages: write
