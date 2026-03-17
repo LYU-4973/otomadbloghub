@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import RSSParser from 'rss-parser';
-import { translate } from 'google-translate-api-next';
+import pkg from 'google-translate-api-next';
+const { translate } = pkg;
 
 const parser = new RSSParser();
 
