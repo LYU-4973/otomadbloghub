@@ -1,23 +1,27 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+---
+// src/layouts/Layout.astro
+const { title } = Astro.props;
+---
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title} | OTOMAD HUB</title>
+    <style is:global>
+      /* 여기에 모든 페이지에 적용될 공통 터미널 스타일을 다 때려넣어! */
+      :root {
+        --terminal-green: #00ff41;
+        --bg-black: #0c0c0c;
+      }
+      body {
+        background: var(--bg-black);
+        color: var(--terminal-green);
+        font-family: 'Courier New', monospace;
+      }
+      /* 스크롤바도 터미널 느낌으로 */
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-thumb { background: var(--terminal-green); }
+    </style>
+  </head>
+  <body>
+    <slot /> </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
