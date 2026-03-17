@@ -5,10 +5,7 @@
     "admin": "[관리자]",
     "suggest": "[+ 제보하기]",
     "latest": "최신 게시글",
-    "uploader": "업로더",
-    "platform": "플랫폼",
-    "original": "원제",
-    "status": ">> 연결된 터미널: "
+    "original": "원제"
   },
   "en": {
     "title": "📟 OtoMAD HUB",
@@ -16,10 +13,7 @@
     "admin": "[ADMIN]",
     "suggest": "[+ SUGGEST]",
     "latest": "LATEST POSTS",
-    "uploader": "Uploader",
-    "platform": "Platform",
-    "original": "Original",
-    "status": ">> Terminals Connected: "
+    "original": "Original"
   },
   "ja": {
     "title": "📟 音MADハブ",
@@ -27,9 +21,6 @@
     "admin": "[管理]",
     "suggest": "[+ 提案]",
     "latest": "最新の投稿",
-    "uploader": "投稿者",
-    "platform": "プラットフォーム",
-    "original": "原題",
-    "status": ">> 接続済み端末: "
+    "original": "原題"
   }
 }
