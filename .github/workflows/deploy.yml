@@ -23,7 +23,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist # Astro 빌드 결과물이 저장되는 폴더
+          path: ./dist
 
   deploy:
     needs: build
